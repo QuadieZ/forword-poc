@@ -3,7 +3,15 @@ import { editorStyle } from "./editorStyle";
 
 export const theme = extendTheme({
     styles: {
-        global: () => (editorStyle)
+        global: () => ({
+            body: {
+                ...editorStyle,
+                '.chakra-avatar__excess': {
+                    background: 'gray.300',
+                    border: '2px solid #fff',
+                }
+            }
+        })
     },
     colors: {
         brand: {
@@ -30,6 +38,10 @@ export const theme = extendTheme({
                     }
                 }
             }
+        },
+        Input: {
+            _active: { borderColor: "brand.primary" },
+            _focus: { borderColor: "brand.primary", boxShadow: "none" }
         }
     }
 })

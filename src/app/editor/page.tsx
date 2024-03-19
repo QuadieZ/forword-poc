@@ -1,8 +1,17 @@
 "use client";
 
 import { ClientSideSuspense } from "@liveblocks/react";
-import { RoomProvider } from "../../../liveblocks.config";
-import { Box, Center, Spinner, Text } from "@chakra-ui/react";
+import { RoomProvider, useOthers, useSelf } from "../../../liveblocks.config";
+import {
+  Avatar,
+  AvatarGroup,
+  Box,
+  Button,
+  Center,
+  HStack,
+  Spinner,
+  Text,
+} from "@chakra-ui/react";
 import { ForwordEditor } from "@/components";
 
 const Loading = () => {
@@ -15,20 +24,12 @@ const Loading = () => {
 
 export default function Page() {
   return (
-    <Box
-      bg="gray.200"
-      pos="absolute"
-      w="100vw"
-      h="100vh"
-      top={0}
-      right={0}
-      p={8}
-    >
-      <RoomProvider id="forword-room" initialPresence={{}}>
+    <RoomProvider id="forword-room" initialPresence={{}}>
+      <Center w="100%" h="100vh">
         <ClientSideSuspense fallback={<Loading />}>
           {() => <ForwordEditor />}
         </ClientSideSuspense>
-      </RoomProvider>
-    </Box>
+      </Center>
+    </RoomProvider>
   );
 }

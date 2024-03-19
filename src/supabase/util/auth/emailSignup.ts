@@ -14,7 +14,10 @@ export async function emailSignup(payload: EmailSignupPayload) {
 
   const res = await supabase.auth.signUp({
     email,
-    password
+    password,
+    options: {
+      emailRedirectTo: "http://localhost:3000/login",
+    }
   })
 
   if (res.error || !res) {

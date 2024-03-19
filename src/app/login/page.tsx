@@ -1,5 +1,6 @@
 "use client";
 
+import { emailSignin } from "@/supabase";
 import {
   Box,
   Button,
@@ -14,8 +15,28 @@ import {
   Text,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export default function Page() {
+  const [email, setEmail] = useState("");
+  const router = useRouter();
+  const [password, setPassword] = useState("");
+
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
+  };
+
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword(e.target.value);
+  };
+
+  const handleLogin = () => {
+    emailSignin({ email, password }).then((res) => {
+      router.push("/editor");
+    });
+  };
+
   return (
     <Center
       w="100vw"
@@ -39,6 +60,8 @@ export default function Page() {
             type="email"
             _active={{ borderColor: "brand.primary" }}
             _focus={{ borderColor: "brand.primary", boxShadow: "none" }}
+            onChange={handleEmailChange}
+            value={email}
           />
         </FormControl>
         <FormControl>
@@ -47,10 +70,12 @@ export default function Page() {
             type="password"
             _active={{ borderColor: "brand.primary" }}
             _focus={{ borderColor: "brand.primary", boxShadow: "none" }}
+            onChange={handlePasswordChange}
+            value={password}
           />
         </FormControl>
         <Stack mt={6} gap={4}>
-          <Button>Login</Button>
+          <Button onClick={handleLogin}>Login</Button>
           <Link
             as={NextLink}
             href="/signup"

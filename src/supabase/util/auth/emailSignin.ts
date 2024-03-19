@@ -14,7 +14,7 @@ export async function emailSignin(payload: EmailSigninPayload) {
 
     const res = await supabase.auth.signInWithPassword({
         email,
-        password
+        password,
     })
 
     if (res.error || !res) {
