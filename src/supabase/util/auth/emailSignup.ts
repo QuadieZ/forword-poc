@@ -16,7 +16,7 @@ export async function emailSignup(payload: EmailSignupPayload) {
     email,
     password,
     options: {
-      emailRedirectTo: "http://localhost:3000/login",
+      emailRedirectTo: process.env.NODE_ENV === 'development' ? "http://localhost:3000/login" : "https://forword-poc.vercel.app/login",
     }
   })
 
