@@ -13,6 +13,7 @@ import {
   Link,
   Stack,
   Text,
+  useToast,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { useState } from "react";
@@ -20,6 +21,7 @@ import { useState } from "react";
 export default function Page() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const toast = useToast();
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
@@ -31,7 +33,15 @@ export default function Page() {
 
   const handleSubmit = () => {
     console.log("submitting", email, password);
-    emailSignup({ email, password });
+    emailSignup({ email, password }).then((res) => {
+      toast({
+        title: "Account created.",
+        description: "We have sent you an email to verify your account.",
+        status: "success",
+        duration: 9000,
+        isClosable: true,
+      });
+    });
   };
 
   return (

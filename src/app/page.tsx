@@ -1,5 +1,5 @@
 import { Text } from "@chakra-ui/react";
 
 export default function Home() {
-  return <Text>Forword POC</Text>;
+  return <Text>All Blogs</Text>;
 }

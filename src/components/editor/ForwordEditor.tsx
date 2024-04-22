@@ -16,7 +16,7 @@ import {
   useOthers,
   useRoom,
   useSelf,
-} from "../../liveblocks.config";
+} from "../../../liveblocks.config";
 import { useEffect, useState } from "react";
 import LiveblocksProvider from "@liveblocks/yjs";
 import {
@@ -32,7 +32,7 @@ import {
 } from "@chakra-ui/react";
 import { GoBold } from "react-icons/go";
 import { LuItalic } from "react-icons/lu";
-import { EditorIconButton } from "./editor";
+import { EditorIconButton } from ".";
 import { FaCode } from "react-icons/fa6";
 
 const colors = [

@@ -1,7 +1,11 @@
 "use client";
 
 import { ClientSideSuspense } from "@liveblocks/react";
-import { RoomProvider, useOthers, useSelf } from "../../../liveblocks.config";
+import {
+  RoomProvider,
+  useOthers,
+  useSelf,
+} from "../../../../../../liveblocks.config";
 import {
   Avatar,
   AvatarGroup,
