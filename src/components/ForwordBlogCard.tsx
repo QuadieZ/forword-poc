@@ -22,6 +22,7 @@ export const ForwordBlogCard = (props: ForwordBlogCardProps) => {
       overflow="hidden"
       variant="ghost"
       background="none"
+      minH="20vh"
     >
       <Image objectFit="cover" w="20%" h="20vh" src={image} alt={title} />
       <Stack>
