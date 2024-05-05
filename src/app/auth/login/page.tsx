@@ -1,5 +1,6 @@
 "use client";
 
+import { ForwordButton, ForwordInput, ForwordLink } from "@/components";
 import { emailSignin } from "@/supabase";
 import {
   Box,
@@ -7,6 +8,7 @@ import {
   Center,
   FormControl,
   FormLabel,
+  HStack,
   Heading,
   Input,
   InputGroup,
@@ -45,48 +47,43 @@ export default function Page() {
       top={0}
       right={0}
       flexDir="column"
-      gap={6}
+      gap={8}
+      pb={4}
     >
-      <Heading fontSize="2xl">
-        Login to{" "}
-        <Box as="span" color="brand.primary">
-          Forword
-        </Box>
-      </Heading>
-      <Stack w="25%">
-        <FormControl>
-          <FormLabel>Email</FormLabel>
-          <Input
-            type="email"
-            _active={{ borderColor: "brand.primary" }}
-            _focus={{ borderColor: "brand.primary", boxShadow: "none" }}
-            onChange={handleEmailChange}
-            value={email}
-          />
-        </FormControl>
-        <FormControl>
-          <FormLabel>Password</FormLabel>
-          <Input
-            type="password"
-            _active={{ borderColor: "brand.primary" }}
-            _focus={{ borderColor: "brand.primary", boxShadow: "none" }}
-            onChange={handlePasswordChange}
-            value={password}
-          />
-        </FormControl>
-        <Stack mt={6} gap={4}>
-          <Button onClick={handleLogin}>Login</Button>
-          <Link
-            as={NextLink}
-            href="/signup"
-            textAlign="center"
-            _hover={{
-              textDecoration: "none",
-              color: "brand.hoverPrimary",
-            }}
-          >
-            {"Don't have an account? Sign up now"}
-          </Link>
+      <Stack align="center">
+        <Heading fontSize="3xl">
+          Welcome to{" "}
+          <Box as="span" color="brand.primary">
+            Forword
+          </Box>
+        </Heading>
+        <Text fontWeight={300}>Sign in to continue</Text>
+      </Stack>
+      <Stack w={["70%", "50%", "50%", "25%"]} gap={2}>
+        <ForwordInput
+          label="Email"
+          onChange={handleEmailChange}
+          value={email}
+        />
+        <ForwordInput
+          label="Password"
+          type="password"
+          onChange={handlePasswordChange}
+          value={password}
+        />
+        <Stack mt={6}>
+          <ForwordButton onClick={handleLogin} w="100%">
+            Sign in
+          </ForwordButton>
+          <Stack mt={4} gap={4}>
+            <ForwordLink href="/auth/forget-password">
+              Forgot password?
+            </ForwordLink>
+            <HStack justify="center" flexWrap="wrap" lineHeight={0.8}>
+              <Text fontWeight={300}>Not yet registered? </Text>
+              <ForwordLink href="/auth/signup">Create an account</ForwordLink>
+            </HStack>
+          </Stack>
         </Stack>
       </Stack>
     </Center>

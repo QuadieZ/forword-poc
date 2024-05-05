@@ -1,5 +1,6 @@
 "use client";
 
+import { ForwordButton, ForwordInput, ForwordLink } from "@/components";
 import { emailSignup } from "@/supabase";
 import {
   Box,
@@ -7,6 +8,7 @@ import {
   Center,
   FormControl,
   FormLabel,
+  HStack,
   Heading,
   Input,
   InputGroup,
@@ -16,12 +18,26 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function Page() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+  const [username, setUsername] = useState("");
+
+  const router = useRouter();
+
   const toast = useToast();
+
+  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setName(e.target.value);
+  };
+
+  const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setUsername(e.target.value);
+  };
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
@@ -32,7 +48,6 @@ export default function Page() {
   };
 
   const handleSubmit = () => {
-    console.log("submitting", email, password);
     emailSignup({ email, password }).then((res) => {
       toast({
         title: "Account created.",
@@ -41,6 +56,7 @@ export default function Page() {
         duration: 9000,
         isClosable: true,
       });
+      router.push("/auth/login");
     });
   };
 
@@ -54,46 +70,40 @@ export default function Page() {
       flexDir="column"
       gap={6}
     >
-      <Heading fontSize="2xl">
+      <Heading fontSize="3xl">
         Sign up for{" "}
         <Box as="span" color="brand.primary">
           Forword
         </Box>
       </Heading>
-      <Stack w="25%">
-        <FormControl>
-          <FormLabel>Email</FormLabel>
-          <Input
-            type="email"
-            _active={{ borderColor: "brand.primary" }}
-            _focus={{ borderColor: "brand.primary", boxShadow: "none" }}
-            onChange={handleEmailChange}
-            value={email}
-          />
-        </FormControl>
-        <FormControl>
-          <FormLabel>Password</FormLabel>
-          <Input
-            type="password"
-            _active={{ borderColor: "brand.primary" }}
-            _focus={{ borderColor: "brand.primary", boxShadow: "none" }}
-            onChange={handlePasswordChange}
-            value={password}
-          />
-        </FormControl>
-        <Stack mt={6} gap={4}>
-          <Button onClick={handleSubmit}>Sign up</Button>
-          <Link
-            as={NextLink}
-            href="/login"
-            textAlign="center"
-            _hover={{
-              textDecoration: "none",
-              color: "brand.hoverPrimary",
-            }}
-          >
-            {"Have an account? Sign in here."}
-          </Link>
+      <Stack w={["70%", "50%", "50%", "25%"]} gap={2}>
+        <ForwordInput label="Name" onChange={handleNameChange} value={name} />
+        <ForwordInput
+          label="Username"
+          onChange={handleUsernameChange}
+          value={username}
+        />
+        <ForwordInput
+          label="Email"
+          onChange={handleEmailChange}
+          value={email}
+        />
+        <ForwordInput
+          label="Password"
+          type="password"
+          onChange={handlePasswordChange}
+          value={password}
+        />
+        <Stack mt={6}>
+          <ForwordButton onClick={handleSubmit} w="100%">
+            Sign up
+          </ForwordButton>
+          <Stack mt={4} gap={4}>
+            <HStack justify="center" flexWrap="wrap" lineHeight={0.8}>
+              <Text fontWeight={300}>Have an account? </Text>
+              <ForwordLink href="/auth/login">Sign in</ForwordLink>
+            </HStack>
+          </Stack>
         </Stack>
       </Stack>
     </Center>

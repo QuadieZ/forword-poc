@@ -32,8 +32,8 @@ export const theme = extendTheme({
             description: '#A8ADB7'
         },
         border: {
-            primary: '#6F7787',
-            secondary: '#DFDFDF'
+            primary: '#DFDFDF',
+            secondary: '#6F7787'
         }
     },
     fonts: {
