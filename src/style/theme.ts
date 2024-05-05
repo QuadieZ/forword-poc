@@ -24,7 +24,7 @@ export const theme = extendTheme({
         },
         background: {
             primary: '#F5F5F5',
-            secondary: '#EEF2FA',
+            secondary: '#E7ECF5',
         },
         content: {
             primary: '#0D0D0D',
@@ -40,24 +40,5 @@ export const theme = extendTheme({
         heading: "Lexend",
         body: "Lexend",
     },
-    components: {
-        Button: {
-            variants: {
-                solid: {
-                    bg: "brand.primary",
-                    color: "brand.contrast",
-                    _hover: {
-                        bg: "brand.hoverPrimary",
-                    },
-                    _active: {
-                        bg: "brand.hoverPrimary",
-                    }
-                }
-            }
-        },
-        Input: {
-            _active: { borderColor: "brand.primary" },
-            _focus: { borderColor: "brand.primary", boxShadow: "none" }
-        }
-    }
+
 })

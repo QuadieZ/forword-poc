@@ -25,10 +25,10 @@ const ButtonStyle: Record<ForwordButtonVariant, ButtonProps> = {
     bg: "brand.secondary",
     color: "brand.primary",
     _hover: {
-      bg: "brand.hoverPrimary",
+      bg: "brand.hoverSecondary",
     },
     _active: {
-      bg: "brand.hoverPrimary",
+      bg: "brand.hoverSecondary",
     },
   },
   outline: {

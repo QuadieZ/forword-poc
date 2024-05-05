@@ -37,6 +37,7 @@ export default function Page() {
           label="Email"
           onChange={handleEmailChange}
           value={email}
+          w="100%"
         />
         <Stack mt={6}>
           <ForwordButton onClick={handleForgotPassword} w="100%">

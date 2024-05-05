@@ -77,22 +77,30 @@ export default function Page() {
         </Box>
       </Heading>
       <Stack w={["70%", "50%", "50%", "25%"]} gap={2}>
-        <ForwordInput label="Name" onChange={handleNameChange} value={name} />
+        <ForwordInput
+          label="Name"
+          onChange={handleNameChange}
+          value={name}
+          w="100%"
+        />
         <ForwordInput
           label="Username"
           onChange={handleUsernameChange}
           value={username}
+          w="100%"
         />
         <ForwordInput
           label="Email"
           onChange={handleEmailChange}
           value={email}
+          w="100%"
         />
         <ForwordInput
           label="Password"
           type="password"
           onChange={handlePasswordChange}
           value={password}
+          w="100%"
         />
         <Stack mt={6}>
           <ForwordButton onClick={handleSubmit} w="100%">

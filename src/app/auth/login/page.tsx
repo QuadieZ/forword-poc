@@ -34,6 +34,7 @@ export default function Page() {
   };
 
   const handleLogin = () => {
+    router.push("/");
     emailSignin({ email, password }).then((res) => {
       router.push("/editor");
     });
@@ -64,12 +65,14 @@ export default function Page() {
           label="Email"
           onChange={handleEmailChange}
           value={email}
+          w="100%"
         />
         <ForwordInput
           label="Password"
           type="password"
           onChange={handlePasswordChange}
           value={password}
+          w="100%"
         />
         <Stack mt={6}>
           <ForwordButton onClick={handleLogin} w="100%">
