@@ -51,12 +51,12 @@ export const ForwordSidebar = () => {
       <Stack gap={4}>
         <SidebarItem href="#" title="User" icon={<Avatar boxSize={7} />} />
         <SidebarItem
-          href="#"
+          href="/organizations"
           title="Organizations"
           icon={<Fa42Group size={24} color="#3D58D8" />}
         />
         <SidebarItem
-          href="#"
+          href="/users"
           title="Collaborators"
           icon={<BsFillPeopleFill size={24} color="#3D58D8" />}
         />

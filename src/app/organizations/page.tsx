@@ -47,7 +47,7 @@ export default function Page() {
       <Stack flexDir="row" flex={1} h="80vh">
         <ForwordSidebar />
         <Stack h="100%" flex={1} py={12} px={10}>
-          <Heading size="lg">Collaborators</Heading>
+          <Heading size="lg">Organizations</Heading>
           <ForwordCollaboratorList collaborators={mockCollaborators} />
         </Stack>
       </Stack>

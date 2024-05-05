@@ -4,6 +4,7 @@ import {
   Flex,
   HStack,
   Heading,
+  Link,
   Menu,
   Stack,
   Text,
@@ -12,6 +13,7 @@ import { ForwordInput } from "./ForwordInput";
 import { FiSearch } from "react-icons/fi";
 import { RiNotification3Fill } from "react-icons/ri";
 import { ForwordButton } from "./ForwordButton";
+import NextLink from "next/link";
 
 export const ForwordNavbar = () => {
   const isLogin = true; // TODO: replace with actual login state
@@ -26,9 +28,16 @@ export const ForwordNavbar = () => {
       borderColor="border.primary"
     >
       <HStack gap={[5, 10, 10, 20]}>
-        <Heading as="h2" fontSize="xl">
-          Forword
-        </Heading>
+        <Link
+          href="/"
+          as={NextLink}
+          _hover={{ textDecor: "none" }}
+          cursor="pointer"
+        >
+          <Heading as="h2" fontSize="xl">
+            Forword
+          </Heading>
+        </Link>
         <ForwordInput
           border="none"
           bg="background.secondary"

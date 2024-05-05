@@ -14,7 +14,7 @@ export type ForwordBlogListProps = {
 export const ForwordBlogList = (props: ForwordBlogListProps) => {
   const { blogs } = props;
   return (
-    <Stack py={4} divider={<Divider borderColor="border.primary" />} gap={4}>
+    <Stack py={6} divider={<Divider borderColor="border.primary" />} gap={4}>
       {blogs.map((blog, index) => (
         <ForwordBlogCard
           key={index}
