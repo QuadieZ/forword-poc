@@ -48,12 +48,10 @@ const ButtonStyle: Record<ForwordButtonVariant, ButtonProps> = {
     bg: "transparent",
     color: "brand.primary",
     _hover: {
-      bg: "brand.primary",
-      color: "brand.contrast",
+      bg: "background.secondary",
     },
     _active: {
-      bg: "brand.primary",
-      color: "brand.contrast",
+      bg: "background.secondary",
     },
   },
 };
