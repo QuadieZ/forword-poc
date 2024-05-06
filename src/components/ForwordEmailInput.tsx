@@ -35,6 +35,7 @@ export const ForwordEmailInput = (props: ForwordEmailInputProps) => {
             boxShadow: "none !important",
             outline: "none",
             fontWeight: 300,
+            width: "100%",
           },
         },
       }}

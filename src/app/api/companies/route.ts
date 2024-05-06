@@ -28,7 +28,22 @@ export async function POST(request: Request) {
         ])
         .select()
 
-    if (createOrganizationError) {
+    const { data: organizationData } = await supabase!
+        .from('user_info')
+        .select('organization_id')
+        .eq('user_id', body.currentUserId)
+
+    const existingId = organizationData![0].organization_id ?? []
+    existingId.push(id)
+    const { error } = await supabase!
+        .from('user_info')
+        .update({
+            organization_id: existingId
+        })
+        .eq('user_id', body.currentUserId)
+
+    console.log(error)
+    if (createOrganizationError || error) {
         return NextResponse.json({ createOrganizationError }, { status: 500 })
     }
 
@@ -42,12 +57,12 @@ export async function POST(request: Request) {
             const existingId = data[0].organization_id ?? []
             existingId.push(id)
             await supabase!
-                .rpc('user_info',
-                    {
-                        organization_id: existingId
-                    }
-                )
+                .from('user_info')
+                .update({
+                    organization_id: existingId
+                })
                 .eq('email', email)
+
             await supabase!
                 .rpc('organization', {
                     members_id: data[0].user_id,

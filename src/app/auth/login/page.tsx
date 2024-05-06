@@ -1,7 +1,8 @@
 "use client";
 
 import { ForwordButton, ForwordInput, ForwordLink } from "@/components";
-import { emailSignin } from "@/supabase";
+import { useUserStore } from "@/state";
+import supabase, { emailSignin } from "@/supabase";
 import {
   Box,
   Center,
@@ -11,6 +12,7 @@ import {
   Text,
   useToast,
 } from "@chakra-ui/react";
+import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -19,6 +21,7 @@ export default function Page() {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const [password, setPassword] = useState("");
+  const setUser = useUserStore((state) => state.setUser);
 
   const toast = useToast();
 
@@ -40,10 +43,26 @@ export default function Page() {
       });
     }
     setIsLoading(true);
+
     emailSignin({ email, password })
       .then((res) => {
-        setIsLoading(false);
-        router.push("/");
+        console.log(res);
+        axios({
+          method: "POST",
+          url: "/api/auth/login",
+          data: { email },
+        })
+          .then((res) => {
+            console.log(res.data);
+            setIsLoading(false);
+            setUser(res.data.user);
+            router.push("/");
+          })
+          .catch((err) => {
+            console.log(err);
+            supabase?.auth.signOut();
+            setIsLoading(false);
+          });
       })
       .catch((err) => {
         setIsLoading(false);

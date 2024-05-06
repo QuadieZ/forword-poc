@@ -1,22 +1,36 @@
+"use client";
+
+import { useUserStore } from "@/state";
+import supabase from "@/supabase";
 import {
   Avatar,
-  AvatarBadge,
-  Flex,
   HStack,
   Heading,
   Link,
   Menu,
-  Stack,
-  Text,
+  MenuButton,
+  MenuItem,
+  MenuList,
 } from "@chakra-ui/react";
-import { ForwordInput } from "./ForwordInput";
-import { FiSearch } from "react-icons/fi";
-import { RiNotification3Fill } from "react-icons/ri";
-import { ForwordButton } from "./ForwordButton";
 import NextLink from "next/link";
+import { useRouter } from "next/navigation";
+import { FiSearch } from "react-icons/fi";
+import { IoLogOut, IoSettings } from "react-icons/io5";
+import { ForwordButton } from "./ForwordButton";
+import { ForwordInput } from "./ForwordInput";
+import { ForwordLink } from "./ForwordLink";
 
 export const ForwordNavbar = () => {
-  const isLogin = true; // TODO: replace with actual login state
+  const user = useUserStore((state) => state.user);
+  const clearUser = useUserStore((state) => state.clearUser);
+  const router = useRouter();
+  const isLogin = !!user; // TODO: replace with actual login state
+
+  function handleLogout() {
+    supabase?.auth.signOut();
+    clearUser();
+    router.push("/auth/login");
+  }
 
   return (
     <HStack
@@ -51,7 +65,7 @@ export const ForwordNavbar = () => {
         {isLogin ? (
           <>
             {/* <ForwordButton variant="secondarySolid">Create</ForwordButton> */}
-            <Avatar
+            {/* <Avatar
               color="brand.primary"
               background="none"
               icon={<RiNotification3Fill size={28} />}
@@ -64,11 +78,32 @@ export const ForwordNavbar = () => {
                 top={-1}
                 right={0.5}
               />
-            </Avatar>
-            <Avatar boxSize={8} />
+            </Avatar> */}
+            <Menu>
+              <MenuButton>
+                <Avatar boxSize={10} name={user.name ?? "Anonymous Unicorn"} />
+              </MenuButton>
+              <MenuList>
+                <MenuItem
+                  px={6}
+                  icon={<IoSettings size={16} color="#3D58D8" />}
+                >
+                  Setting
+                </MenuItem>
+                <MenuItem
+                  onClick={handleLogout}
+                  icon={<IoLogOut size={16} color="#3D58D8" />}
+                  px={6}
+                >
+                  Log out
+                </MenuItem>
+              </MenuList>
+            </Menu>
           </>
         ) : (
-          <ForwordButton>Login</ForwordButton>
+          <ForwordLink href="/auth/login">
+            <ForwordButton>Login</ForwordButton>
+          </ForwordLink>
         )}
       </HStack>
     </HStack>

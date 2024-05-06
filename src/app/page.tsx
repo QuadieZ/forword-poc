@@ -1,3 +1,5 @@
+"use client";
+
 import { ForwordNavbar, ForwordSidebar } from "@/components";
 import { BlogPreviewData, ForwordBlogList } from "@/components/ForwordBlogList";
 import {
