@@ -5,16 +5,18 @@ export type ForwordCollaboratorData = {
   name: string;
   description: string;
   image?: string;
+  slug: string;
 };
 
 export type ForwordCollaboratorListProps = {
   collaborators: ForwordCollaboratorData[];
+  type?: "user" | "organization";
 };
 
 export const ForwordCollaboratorList = (
   props: ForwordCollaboratorListProps
 ) => {
-  const { collaborators } = props;
+  const { collaborators, type = "organization" } = props;
 
   return (
     <Stack
@@ -30,6 +32,8 @@ export const ForwordCollaboratorList = (
           title={collaborator.name}
           description={collaborator.description}
           image={collaborator.image}
+          slug={collaborator.slug}
+          type={type}
         />
       ))}
     </Stack>

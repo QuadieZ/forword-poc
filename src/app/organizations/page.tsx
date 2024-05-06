@@ -1,42 +1,47 @@
 import {
-  ForwordCollaboratorCard,
   ForwordCollaboratorData,
   ForwordCollaboratorList,
   ForwordNavbar,
   ForwordSidebar,
 } from "@/components";
-import { Heading, Stack, Text } from "@chakra-ui/react";
+import { Heading, Stack } from "@chakra-ui/react";
 
 const mockCollaborators: ForwordCollaboratorData[] = [
   {
     name: "John Doe",
     description: "Software Engineer",
     image: "https://source.unsplash.com/random/800x600",
+    slug: "org1",
   },
   {
     name: "Jane Doe",
     description: "Designer",
     image: "https://source.unsplash.com/random/800x600",
+    slug: "org1",
   },
   {
     name: "John Smith",
     description: "Product Manager",
     image: "https://source.unsplash.com/random/800x600",
+    slug: "org1",
   },
   {
     name: "Jane Smith",
     description: "Software Engineer",
     image: "https://source.unsplash.com/random/800x600",
+    slug: "org1",
   },
   {
     name: "Jane Smith",
     description: "Software Engineer",
     image: "https://source.unsplash.com/random/800x600",
+    slug: "org1",
   },
   {
     name: "Jane Smith",
     description: "Software Engineer",
     image: "https://source.unsplash.com/random/800x600",
+    slug: "org1",
   },
 ];
 

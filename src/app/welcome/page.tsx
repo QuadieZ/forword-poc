@@ -1,4 +1,4 @@
-import { ForwordButton, ForwordFooter } from "@/components";
+import { ForwordButton, ForwordFooter, ForwordLink } from "@/components";
 import { HStack, Heading, Image, Stack, Text } from "@chakra-ui/react";
 
 const WelcomeNavbar = () => {
@@ -7,9 +7,11 @@ const WelcomeNavbar = () => {
       <Heading as="h2" fontSize="xl">
         Forword
       </Heading>
-      <ForwordButton display={["none", "flex", "flex", "flex"]}>
-        Try Forword Now
-      </ForwordButton>
+      <ForwordLink href="/">
+        <ForwordButton display={["none", "flex", "flex", "flex"]}>
+          Try Forword Now
+        </ForwordButton>
+      </ForwordLink>
     </HStack>
   );
 };
@@ -18,7 +20,6 @@ export default function Page() {
   return (
     <Stack h="100%" w="100%">
       <WelcomeNavbar />
-
       <Stack
         w="100%"
         flex={1}
@@ -50,7 +51,9 @@ export default function Page() {
             Forword is a realtime collaborative blogging platform to help you
             discover, create, and share blogs with ease
           </Text>
-          <ForwordButton>Get Started</ForwordButton>
+          <ForwordLink href="/auth/signup" w="fit-content">
+            <ForwordButton>Get Started</ForwordButton>
+          </ForwordLink>
         </Stack>
         <Stack
           flex={0.4}

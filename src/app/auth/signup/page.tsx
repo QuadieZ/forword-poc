@@ -1,23 +1,16 @@
 "use client";
 
 import { ForwordButton, ForwordInput, ForwordLink } from "@/components";
-import { emailSignup } from "@/supabase";
 import {
   Box,
-  Button,
   Center,
-  FormControl,
-  FormLabel,
   HStack,
   Heading,
-  Input,
-  InputGroup,
-  Link,
   Stack,
   Text,
   useToast,
 } from "@chakra-ui/react";
-import NextLink from "next/link";
+import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -26,6 +19,7 @@ export default function Page() {
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [username, setUsername] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const router = useRouter();
 
@@ -48,16 +42,67 @@ export default function Page() {
   };
 
   const handleSubmit = () => {
-    emailSignup({ email, password }).then((res) => {
+    if (!email || !password || !name || !username) {
       toast({
-        title: "Account created.",
-        description: "We have sent you an email to verify your account.",
-        status: "success",
+        title: "Please fill all fields.",
+        status: "error",
         duration: 9000,
         isClosable: true,
       });
-      router.push("/auth/login");
-    });
+      return;
+    }
+
+    if (password.length < 8) {
+      toast({
+        title: "Password must be at least 8 characters long.",
+        status: "error",
+        duration: 9000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    setIsLoading(true);
+    axios({
+      method: "POST",
+      url: "/api/auth/signup",
+      data: {
+        email,
+        password,
+        name,
+        username,
+      },
+    })
+      .then((res) => {
+        console.log(res);
+        toast({
+          title: "Account created.",
+          description: "We have sent you an email to verify your account.",
+          status: "success",
+          duration: 9000,
+          isClosable: true,
+        });
+        router.push("/auth/login");
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        if (err.response && err.response.data) {
+          toast({
+            title: err.response.data.error,
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+        } else {
+          toast({
+            title: "An error occurred.",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+        }
+        setIsLoading(false);
+      });
   };
 
   return (
@@ -103,7 +148,7 @@ export default function Page() {
           w="100%"
         />
         <Stack mt={6}>
-          <ForwordButton onClick={handleSubmit} w="100%">
+          <ForwordButton onClick={handleSubmit} w="100%" isLoading={isLoading}>
             Sign up
           </ForwordButton>
           <Stack mt={4} gap={4}>

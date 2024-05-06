@@ -5,6 +5,8 @@ export type BlogPreviewData = {
   title: string;
   description: string;
   image: string;
+  slug: string;
+  company: string;
 };
 
 export type ForwordBlogListProps = {
@@ -27,6 +29,8 @@ export const ForwordBlogList = (props: ForwordBlogListProps) => {
           title={blog.title}
           description={blog.description}
           image={blog.image}
+          slug={blog.slug}
+          company={blog.company}
         />
       ))}
     </Stack>

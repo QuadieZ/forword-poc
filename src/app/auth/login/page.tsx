@@ -4,26 +4,23 @@ import { ForwordButton, ForwordInput, ForwordLink } from "@/components";
 import { emailSignin } from "@/supabase";
 import {
   Box,
-  Button,
   Center,
-  FormControl,
-  FormLabel,
   HStack,
   Heading,
-  Input,
-  InputGroup,
-  Link,
   Stack,
   Text,
+  useToast,
 } from "@chakra-ui/react";
-import NextLink from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function Page() {
   const [email, setEmail] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const [password, setPassword] = useState("");
+
+  const toast = useToast();
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
@@ -34,10 +31,30 @@ export default function Page() {
   };
 
   const handleLogin = () => {
-    router.push("/");
-    emailSignin({ email, password }).then((res) => {
-      router.push("/editor");
-    });
+    if (!email || !password) {
+      toast({
+        title: "Please fill in all fields",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+    setIsLoading(true);
+    emailSignin({ email, password })
+      .then((res) => {
+        setIsLoading(false);
+        router.push("/");
+      })
+      .catch((err) => {
+        setIsLoading(false);
+        toast({
+          title: "Incorrect email or password",
+          description: err.message,
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+      });
   };
 
   return (
@@ -75,7 +92,7 @@ export default function Page() {
           w="100%"
         />
         <Stack mt={6}>
-          <ForwordButton onClick={handleLogin} w="100%">
+          <ForwordButton onClick={handleLogin} w="100%" isLoading={isLoading}>
             Sign in
           </ForwordButton>
           <Stack mt={4} gap={4}>

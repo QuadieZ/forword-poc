@@ -2,25 +2,26 @@ import {
   Avatar,
   Card,
   CardBody,
-  CardHeader,
   HStack,
   Heading,
-  Image,
-  Stack,
   Text,
 } from "@chakra-ui/react";
 import { ForwordButton } from "./ForwordButton";
+import { ForwordLink } from "./ForwordLink";
 
 export type ForwordCollaboratorCardProps = {
   title: string;
+  slug: string;
   description: string;
   image?: string;
+  type?: "user" | "organization";
 };
 
 export const ForwordCollaboratorCard = (
   props: ForwordCollaboratorCardProps
 ) => {
-  const { title, description, image } = props;
+  const { title, description, image, type = "organization", slug } = props;
+
   return (
     <Card
       direction={{ base: "column", sm: "row" }}
@@ -33,12 +34,23 @@ export const ForwordCollaboratorCard = (
       px={4}
       py={2}
     >
-      <Avatar size="lg" name={title} src={image} />
+      <ForwordLink
+        href={type === "organization" ? `/${slug}` : `/users/${slug}`}
+        textAlign="start"
+      >
+        <Avatar size="lg" name={title} src={image} />
+      </ForwordLink>
       <HStack flex={1} justify="space-between">
-        <CardBody gap={2}>
-          <Heading size="md">{title}</Heading>
-          <Text fontWeight={300}>{description}</Text>
-        </CardBody>
+        <ForwordLink
+          href={type === "organization" ? `/${slug}` : `/users/${slug}`}
+          textAlign="start"
+          color="content.primary"
+        >
+          <CardBody gap={2} flex={1}>
+            <Heading size="md">{title}</Heading>
+            <Text fontWeight={300}>{description}</Text>
+          </CardBody>
+        </ForwordLink>
         <ForwordButton variant="secondarySolid">Follow</ForwordButton>
       </HStack>
     </Card>

@@ -1,4 +1,5 @@
 import { Heading, Stack, Text } from "@chakra-ui/react";
+import { ForwordLink } from "./ForwordLink";
 
 export const ForwordFooter = () => {
   return (
@@ -23,7 +24,12 @@ export const ForwordFooter = () => {
         <Text fontWeight={300} fontSize="sm">
           Get Assistance
         </Text>
-        <Text>Contact Us</Text>
+        <ForwordLink
+          isExternal
+          href="mailto:lifeat.deva@gmail.com?subject=Forword: Request assistance"
+        >
+          Contact Us
+        </ForwordLink>
       </Stack>
       <Heading
         as="h2"

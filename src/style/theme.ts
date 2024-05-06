@@ -1,4 +1,4 @@
-import { background, extendTheme } from "@chakra-ui/react";
+import { extendTheme } from "@chakra-ui/react";
 import { editorStyle } from "./editorStyle";
 
 export const theme = extendTheme({
