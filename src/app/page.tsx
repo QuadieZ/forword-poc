@@ -13,6 +13,7 @@ export default function Home() {
   return (
     <Stack>
       <Navbar />
+      <Stack height="40px"></Stack>
       <Stack>
         <Tabs position="relative" variant="unstyled">
           <TabList>
