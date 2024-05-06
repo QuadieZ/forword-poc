@@ -49,6 +49,8 @@ const mockBlogPreview: BlogPreviewData[] = [
 ];
 
 export default function Page() {
+  const isMember = true;
+
   return (
     <Stack gap={0} spacing={0} h="100%">
       <ForwordNavbar />
@@ -104,8 +106,25 @@ export default function Page() {
             </HStack>
           </HStack>
           <Divider borderColor="border.primary" />
-          <Stack h="100%" overflow="scroll" px={12}>
-            <ForwordBlogList blogs={mockBlogPreview} />
+          <Stack h="100%" overflow="scroll" px={isMember ? 0 : 12}>
+            {isMember ? (
+              <Tabs>
+                <TabList>
+                  <Tab>All Blogs</Tab>
+                  <Tab>Active Sessions</Tab>
+                </TabList>
+                <TabPanels>
+                  <TabPanel>
+                    <ForwordBlogList blogs={mockBlogPreview} />
+                  </TabPanel>
+                  <TabPanel>
+                    <ForwordBlogList blogs={mockBlogPreview} />
+                  </TabPanel>
+                </TabPanels>
+              </Tabs>
+            ) : (
+              <ForwordBlogList blogs={mockBlogPreview} />
+            )}
           </Stack>
         </Stack>
       </Stack>

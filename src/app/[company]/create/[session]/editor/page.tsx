@@ -21,7 +21,7 @@ import { ForwordEditor } from "@/components";
 const Loading = () => {
   return (
     <Center w="100%" h="100%">
-      <Spinner size="xl" color="#4CCD99" />
+      <Spinner size="xl" color="brand.primary" />
     </Center>
   );
 };

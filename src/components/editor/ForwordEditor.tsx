@@ -29,11 +29,19 @@ import {
   Input,
   Stack,
   Text,
+  Link,
+  Heading,
+  Divider,
 } from "@chakra-ui/react";
 import { GoBold } from "react-icons/go";
 import { LuItalic } from "react-icons/lu";
 import { EditorIconButton } from ".";
 import { FaCode } from "react-icons/fa6";
+import NextLink from "next/link";
+import { ForwordButton } from "../ForwordButton";
+import { ForwordLink } from "../ForwordLink";
+import { BsChevronBarLeft, BsChevronLeft } from "react-icons/bs";
+import { useParams, useRouter } from "next/navigation";
 
 const colors = [
   "#59D5E0",
@@ -82,6 +90,7 @@ function TipTapEditor(props: EditorProps) {
 }
 
 export const ForwordEditor = () => {
+  const params = useParams<{ company: string }>();
   const room = useRoom();
   const broadcast = useBroadcastEvent();
   const [doc, setDoc] = useState<Y.Doc>();
@@ -89,8 +98,12 @@ export const ForwordEditor = () => {
   const [editor, setEditor] = useState<Editor | null>(null);
   const [title, setTitle] = useState<string>();
 
+  const router = useRouter();
   const currentUser = useSelf();
   const users = useOthers();
+
+  const isOwner = true; // TODO: check if current user is the owner of the blog
+  const isSharable = true; // TODO: check if current user can share the blog
 
   // Set up Liveblocks Yjs provider
   useEffect(() => {
@@ -125,9 +138,25 @@ export const ForwordEditor = () => {
       pos="relative"
       gap={4}
     >
-      <HStack h="10vh" w="100%" bg="gray.200" justify="space-between" px={16}>
-        <Text>Forword</Text>
-        <HStack>
+      <HStack
+        px={[8, 10, 10]}
+        w="100%"
+        h="10vh"
+        justify="space-between"
+        borderBottom="1px solid"
+        borderColor="border.primary"
+      >
+        <Link
+          href="/"
+          as={NextLink}
+          _hover={{ textDecor: "none" }}
+          cursor="pointer"
+        >
+          <Heading as="h2" fontSize="xl">
+            Forword
+          </Heading>
+        </Link>
+        <HStack gap={4}>
           <AvatarGroup size="sm" max={2}>
             {currentUser && (
               <Avatar
@@ -147,10 +176,32 @@ export const ForwordEditor = () => {
               />
             ))}
           </AvatarGroup>
-          <Button>Publish</Button>
+          {isSharable && <ForwordButton variant="outline">Share</ForwordButton>}
+          {isOwner && <ForwordButton>Publish</ForwordButton>}
         </HStack>
       </HStack>
-      <Flex flexDir="column" pt={16} px={16}>
+      <Flex
+        flexDir="column"
+        py={12}
+        px={48}
+        mb={28}
+        h="80vh"
+        align="flex-start"
+        overflowY="scroll"
+      >
+        <ForwordLink
+          href={`/${params.company}`}
+          mb={6}
+          color="content.primary"
+          fontSize="sm"
+          flexDir="row"
+          display="flex"
+          alignItems="center"
+          gap={2}
+        >
+          <BsChevronLeft />
+          Leave Session
+        </ForwordLink>
         <Input
           fontSize="3xl"
           border="none"
@@ -158,6 +209,7 @@ export const ForwordEditor = () => {
           _focus={{ border: "none", boxShadow: "none" }}
           p={0}
           placeholder="New Blog Title..."
+          fontWeight={700}
           _placeholder={{
             color: "gray.400",
           }}
@@ -171,6 +223,7 @@ export const ForwordEditor = () => {
           }}
           mb={4}
         />
+        <Divider borderColor="border.primary" mb={8} mt={2} />
         <TipTapEditor
           document={doc}
           provider={provider}

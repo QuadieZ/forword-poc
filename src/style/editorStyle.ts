@@ -36,4 +36,7 @@ export const editorStyle = {
         padding: '3px 6px',
         fontSize: '85%'
     },
+    'p': {
+        fontWeight: '300',
+    }
 }
