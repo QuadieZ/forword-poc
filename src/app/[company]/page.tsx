@@ -118,7 +118,7 @@ export default function Page() {
       const blogDataSession = response?.blogDataSession;
 
       setActiveSessions(
-        blogDataSession?.map((blog) => ({
+        blogDataSession?.map((blog: any) => ({
           title: blog.blog_name!,
           description: blog.blog_description ?? "A very cool blog!",
           image:
