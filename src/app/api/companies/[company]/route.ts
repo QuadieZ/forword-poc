@@ -20,7 +20,20 @@ export async function GET(_, {
         .select('user_id, name')
         .in('user_id', companyData![0].members_id ?? [])
 
-    if (errorCompany || errorBlog || errorMember) {
+    const { data: activeSessions, error: sessionError } = await supabase!
+        .from('session')
+        .select('session_id,blog_id')
+        .eq('organization_id', company)
+
+    const { data: blogDataSession, error: blogDataSessionError } = await supabase!
+        .from('blog')
+        .select('blog_id, blog_name, blog_image')
+        .eq('organization_id', company)
+        .eq('publish', false)
+    console.log(errorCompany, errorBlog, errorMember, sessionError, blogDataSessionError)
+
+    if (errorCompany || errorBlog || errorMember || sessionError || blogDataSessionError) {
+
         return NextResponse.json({ error: 'Error querying from database' }, { status: 500 })
     }
 
@@ -28,6 +41,8 @@ export async function GET(_, {
     // https://nextjs.org/docs/app/building-your-application/routing/route-handlers
     return NextResponse.json({
         data: {
+            activeSessions: activeSessions,
+            blogDataSession: blogDataSession,
             members: memberData,
             blogs: blogData,
             company: companyData

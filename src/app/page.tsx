@@ -61,6 +61,7 @@ export default function Home() {
   const [forYouBlogs, setForYouBlogs] = useState<BlogPreviewData[]>([]);
   const [ourPicksBlogs, setOurPicksBlogs] = useState<BlogPreviewData[]>([]);
   const [followingBlogs, setFollowingBlogs] = useState<BlogPreviewData[]>([]);
+  const [allBlogs, setAllBlogs] = useState<BlogPreviewData[]>([]);
 
   const router = useRouter();
   useEffect(() => {
@@ -73,6 +74,7 @@ export default function Home() {
     })
       .then((res) => {
         const response = res.data.data;
+        const allPostsData = response.allPostsData as Tables<"blog">[];
         const topPostsData = response.topPostsData as Tables<"blog">[];
         const recommendedPostsData =
           response.recommendedPostsData as Tables<"blog">[];
@@ -104,6 +106,15 @@ export default function Home() {
             company: blog.organization_id!,
           }))
         );
+        setAllBlogs(
+          allPostsData.map((blog) => ({
+            title: blog.blog_name!,
+            description: blog.blog_description ?? "A very awesome blog",
+            image: blog.blog_image!,
+            slug: blog.blog_id!,
+            company: blog.organization_id!,
+          }))
+        );
         setIsLoading(false);
       })
       .catch((err) => {
@@ -122,6 +133,7 @@ export default function Home() {
               <Tab>For You</Tab>
               <Tab>Our Picks</Tab>
               <Tab>Following</Tab>
+              <Tab>All Blogs</Tab>
             </TabList>
             {isLoading ? (
               <ForwordSpinner />
@@ -164,6 +176,9 @@ export default function Home() {
                   ) : (
                     <ForwordBlogList blogs={followingBlogs} />
                   )}
+                </TabPanel>
+                <TabPanel>
+                  <ForwordBlogList blogs={allBlogs} />
                 </TabPanel>
               </TabPanels>
             )}

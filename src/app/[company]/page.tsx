@@ -3,7 +3,10 @@
 import {
   BlogPreviewData,
   ForwordBlogList,
+  ForwordButton,
+  ForwordInput,
   ForwordNavbar,
+  ForwordOverlayLoader,
   ForwordSidebar,
   ForwordSpinner,
 } from "@/components";
@@ -12,8 +15,15 @@ import {
   Avatar,
   AvatarGroup,
   Divider,
+  Flex,
   HStack,
   Heading,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
   Stack,
   Stat,
   StatHelpText,
@@ -25,10 +35,13 @@ import {
   TabPanels,
   Tabs,
   Text,
+  useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { IoMdCreate } from "react-icons/io";
 import { Tables } from "../../../types/supabase";
 
 const mockBlogPreview: BlogPreviewData[] = [
@@ -65,14 +78,21 @@ const mockBlogPreview: BlogPreviewData[] = [
 export default function Page() {
   const { company } = useParams<{ company: string }>();
 
+  const { isOpen, onClose, onOpen } = useDisclosure();
   const currentUser = useUserStore((state) => state.user);
   const isMember = currentUser?.organization_id?.includes(company);
 
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
   const [companyData, setCompanyData] = useState<Tables<"organization">>();
   const [blogsData, setBlogsData] = useState<BlogPreviewData[]>([]);
   const [membersData, setMembersData] = useState<Tables<"user_info">[]>([]);
+  const [blogName, setBlogName] = useState("");
+  const [description, setDescription] = useState("");
+  const [isCreatingSession, setIsCreatingSession] = useState(false);
+  const [activeSessions, setActiveSessions] = useState<BlogPreviewData[]>([]);
 
+  const toast = useToast();
   useEffect(() => {
     axios({
       method: "GET",
@@ -93,15 +113,116 @@ export default function Page() {
         }))
       );
       setMembersData(response.members);
+
+      const allSessions = response?.activeSessions;
+      const blogDataSession = response?.blogDataSession;
+
+      setActiveSessions(
+        blogDataSession?.map((blog) => ({
+          title: blog.blog_name!,
+          description: blog.blog_description ?? "A very cool blog!",
+          image:
+            blog.blog_image ?? "https://source.unsplash.com/random/800x600",
+          slug: `create/${
+            allSessions.find((session: any) => session.blog_id === blog.blog_id)
+              ?.session_id
+          }/editor`,
+          company: company,
+        }))
+      );
       setIsLoading(false);
     });
   }, []);
 
+  function handleCancelCreateSession() {
+    onClose();
+    setBlogName("");
+    setDescription("");
+  }
+
+  function handleConfirmCreateSession() {
+    setIsCreatingSession(true);
+    onClose();
+    setBlogName("");
+    setDescription("");
+    axios({
+      method: "POST",
+      url: `/api/companies/${company}/session`,
+      data: {
+        blogName: blogName,
+        description: description,
+        uid: currentUser?.user_id,
+      },
+    })
+      .then((res) => {
+        const sessionId = res.data.sessionId;
+        toast({
+          title: "Session created",
+          description: "Redirecting to the session page...",
+          status: "success",
+          duration: 9000,
+          isClosable: true,
+        });
+        router.push(`/${company}/create/${company}:${sessionId}/editor`);
+      })
+      .catch(() => {
+        toast({
+          title: "Failed to create session",
+          description: "Please try again",
+          status: "error",
+          duration: 9000,
+          isClosable: true,
+        });
+      });
+  }
+
   return (
     <Stack gap={0} spacing={0} h="100%">
+      {isCreatingSession && <ForwordOverlayLoader />}
       <ForwordNavbar />
       <Stack flexDir="row" flex={1} h="80vh">
         <ForwordSidebar />
+        <Modal
+          isOpen={isOpen}
+          onClose={handleCancelCreateSession}
+          closeOnOverlayClick={false}
+          isCentered
+        >
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>Create a new writing session</ModalHeader>
+            <ModalBody pb={8} pr={16}>
+              <Flex gap={6} flexDir="column">
+                <ForwordInput
+                  label="Blog Name"
+                  value={blogName}
+                  placeholder="Give it a cool name"
+                  onChange={(e) => setBlogName(e.target.value)}
+                />
+                <ForwordInput
+                  label="Description"
+                  value={description}
+                  placeholder="Descriptive description for your org"
+                  onChange={(e) => setDescription(e.target.value)}
+                />
+              </Flex>
+            </ModalBody>
+            <ModalFooter gap={4}>
+              <ForwordButton
+                variant="outline"
+                onClick={handleCancelCreateSession}
+              >
+                Cancel
+              </ForwordButton>
+              <ForwordButton
+                isLoading={isLoading}
+                onClick={handleConfirmCreateSession}
+              >
+                Create
+              </ForwordButton>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
         {isLoading ? (
           <ForwordSpinner />
         ) : (
@@ -109,8 +230,8 @@ export default function Page() {
             <HStack justify="space-between">
               <HStack gap={6}>
                 <Avatar
-                  name="John Doe"
-                  src="https://source.unsplash.com/random/800x600"
+                  name={companyData?.organization_name ?? "Forword"}
+                  //src="https://source.unsplash.com/random/800x600"
                   size="2xl"
                 />
                 <Stack gap={0}>
@@ -168,7 +289,13 @@ export default function Page() {
                       <ForwordBlogList blogs={blogsData} />
                     </TabPanel>
                     <TabPanel>
-                      <ForwordBlogList blogs={mockBlogPreview} />
+                      <Flex justify="flex-end" mb={4}>
+                        <ForwordButton gap={2} onClick={onOpen}>
+                          <IoMdCreate />
+                          Create Session
+                        </ForwordButton>
+                      </Flex>
+                      <ForwordBlogList blogs={activeSessions} />
                     </TabPanel>
                   </TabPanels>
                 </Tabs>

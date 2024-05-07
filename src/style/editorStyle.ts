@@ -1,6 +1,8 @@
+
 export const editorStyle = {
     '.ProseMirror': {
         height: '100%',
+        width: '100%',
     },
     '.ProseMirror-focused': {
         outline: 'none'

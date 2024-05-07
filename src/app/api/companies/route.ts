@@ -30,6 +30,7 @@ export async function POST(request: Request) {
             {
                 organization_id: id,
                 organization_name: body.organizationName,
+                description: body.description,
                 members_id: [body.currentUserId],
                 followers_id: [],
                 followers_count: 0,
@@ -57,6 +58,7 @@ export async function POST(request: Request) {
         return NextResponse.json({ createOrganizationError }, { status: 500 })
     }
 
+    const newMembers = [body.currentUserId]
     body.emails.forEach(async (email: string) => {
         const { data, error: checkUserError } = await supabase!
             .from('user_info')
@@ -73,12 +75,8 @@ export async function POST(request: Request) {
                 })
                 .eq('email', email)
 
-            await supabase!
-                .from('organization')
-                .update({
-                    members_id: data[0].user_id,
-                })
-                .eq('organization_id', id)
+            newMembers.push(data[0].user_id)
+
         } else {
             const uid = uuid()
             await supabase!.
@@ -105,6 +103,12 @@ export async function POST(request: Request) {
                 text: `You have been invited to join Forword! Click here to join: https://forword-poc.vercel.app/`, //TODO: Check if user is signed us
             })
         }
+        await supabase!
+            .from('organization')
+            .update({
+                members_id: newMembers,
+            })
+            .eq('organization_id', id)
     })
 
     return NextResponse.json({ data }, { status: 200 })

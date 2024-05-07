@@ -5,17 +5,27 @@ export async function POST(request: Request) {
     const body = await request.json()
     const uid = body.uid
 
+    const { data: allPostsData, error: allPostsError } = await supabase!
+        .from('blog')
+        .select('blog_id, organization_id, blog_name, blog_image, blog_description')
+        .order('blog_post_date', { ascending: false })
+        .eq('publish', true)
+
+
     const { data: topPostsData, error: topPostsError } = await supabase!
         .from('blog')
         .select('blog_id, organization_id, blog_name, blog_image, blog_description')
         .order('blog_likes_count', { ascending: false })
+        .eq('publish', true)
         .limit(5)
 
     const { data: recommendedPostsData, error: recomendedPostsError } = await supabase!
         .from('blog')
         .select('blog_id, organization_id, blog_name, blog_image, blog_description')
         .limit(5)
+        .eq('publish', true)
         .eq('is_recommended', true)
+
 
     const { data: followingOrganizations, error: followingError } = await supabase!
         .from('organization')
@@ -31,7 +41,8 @@ export async function POST(request: Request) {
             .from('blog')
             .select('blog_id, organization_id, blog_name, blog_image, blog_description')
             .eq('organization_id', org.organization_id)
-            .order('created_at', { ascending: false })
+            .order('blog_post_date', { ascending: false })
+            .eq('publish', true)
             .limit(1)
 
         if (data) {
@@ -43,14 +54,14 @@ export async function POST(request: Request) {
         }
     })
 
-    if (topPostsError || recomendedPostsError || followingError) {
+    if (topPostsError || recomendedPostsError || followingError || allPostsError) {
         console.log(topPostsError, recomendedPostsError, followingError)
         return NextResponse.json({ error: topPostsError || recomendedPostsError || followingError }, { status: 500 })
     }
 
     return NextResponse.json({
         data: {
-            topPostsData, recommendedPostsData, followingPosts
+            topPostsData, recommendedPostsData, followingPosts, allPostsData
         }, status: 200
     })
 }

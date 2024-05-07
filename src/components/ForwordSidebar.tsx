@@ -73,6 +73,7 @@ export const ForwordSidebar = () => {
   const { onClose, onOpen, isOpen } = useDisclosure();
 
   const [orgName, setOrgName] = useState("");
+  const [description, setDescription] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [emails, setEmails] = useState<string[]>([]);
   const [displayOrganizations, setDisplayOrganizations] = useState<
@@ -85,6 +86,7 @@ export const ForwordSidebar = () => {
 
   function handleCloseModal() {
     setOrgName("");
+    setDescription("");
     setEmails([]);
     onClose();
   }
@@ -142,6 +144,7 @@ export const ForwordSidebar = () => {
         organizationName: orgName,
         emails,
         currentUserId: user?.user_id,
+        description,
       },
     })
       .then((res) => {
@@ -182,6 +185,12 @@ export const ForwordSidebar = () => {
                 value={orgName}
                 placeholder="Give it a cool name"
                 onChange={(e) => setOrgName(e.target.value)}
+              />
+              <ForwordInput
+                label="Description"
+                value={description}
+                placeholder="Descriptive description for your org"
+                onChange={(e) => setDescription(e.target.value)}
               />
               <ForwordEmailInput emails={emails} setEmails={setEmails} />
             </Flex>

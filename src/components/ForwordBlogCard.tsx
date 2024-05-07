@@ -20,7 +20,13 @@ export const ForwordBlogCard = (props: ForwordBlogCardProps) => {
         background="none"
         minH="20vh"
       >
-        <Image objectFit="cover" w="20%" h="20vh" src={image} alt={title} />
+        <Image
+          objectFit="cover"
+          w="20%"
+          h="20vh"
+          src={image ?? "https://source.unsplash.com/random/800x600"}
+          alt={title}
+        />
         <Stack>
           <CardBody>
             <Heading size="md">{title}</Heading>

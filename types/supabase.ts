@@ -55,7 +55,15 @@ export type Database = {
           publish?: boolean | null
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "blog_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organization"
+            referencedColumns: ["organization_id"]
+          },
+        ]
       }
       blog_comment: {
         Row: {
@@ -274,6 +282,29 @@ export type Database = {
           role_authority_id?: string
         }
         Relationships: []
+      }
+      session: {
+        Row: {
+          organization_id: string | null
+          session_id: string
+        }
+        Insert: {
+          organization_id?: string | null
+          session_id: string
+        }
+        Update: {
+          organization_id?: string | null
+          session_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "session_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organization"
+            referencedColumns: ["organization_id"]
+          },
+        ]
       }
       user_account: {
         Row: {
