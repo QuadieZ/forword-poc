@@ -1,6 +1,15 @@
-import "@fontsource/quicksand";
+import "@fontsource/lexend/100.css";
+import "@fontsource/lexend/200.css";
+import "@fontsource/lexend/300.css";
+import "@fontsource/lexend/400.css";
+import "@fontsource/lexend/500.css";
+import "@fontsource/lexend/600.css";
+import "@fontsource/lexend/700.css";
+import "@fontsource/lexend/800.css";
+
 import type { Metadata } from "next";
 import { Providers } from "@/components";
+import { Box } from "@chakra-ui/react";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -15,7 +24,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <Providers>{children}</Providers>
+        <Box as="main" h="100vh">
+          <Providers>{children}</Providers>
+        </Box>
       </body>
     </html>
   );

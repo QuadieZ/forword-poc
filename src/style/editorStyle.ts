@@ -1,6 +1,8 @@
+
 export const editorStyle = {
     '.ProseMirror': {
         height: '100%',
+        width: '100%',
     },
     '.ProseMirror-focused': {
         outline: 'none'
@@ -36,4 +38,7 @@ export const editorStyle = {
         padding: '3px 6px',
         fontSize: '85%'
     },
+    'p': {
+        fontWeight: '300',
+    }
 }

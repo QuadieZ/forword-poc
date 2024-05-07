@@ -1,27 +1,29 @@
 "use client";
 
-import { emailSignin } from "@/supabase";
+import { ForwordButton, ForwordInput, ForwordLink } from "@/components";
+import { useUserStore } from "@/state";
+import supabase, { emailSignin } from "@/supabase";
 import {
   Box,
-  Button,
   Center,
-  FormControl,
-  FormLabel,
+  HStack,
   Heading,
-  Input,
-  InputGroup,
-  Link,
   Stack,
   Text,
+  useToast,
 } from "@chakra-ui/react";
-import NextLink from "next/link";
+import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function Page() {
   const [email, setEmail] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const [password, setPassword] = useState("");
+  const setUser = useUserStore((state) => state.setUser);
+
+  const toast = useToast();
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
@@ -32,9 +34,46 @@ export default function Page() {
   };
 
   const handleLogin = () => {
-    emailSignin({ email, password }).then((res) => {
-      router.push("/editor");
-    });
+    if (!email || !password) {
+      toast({
+        title: "Please fill in all fields",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+    setIsLoading(true);
+
+    emailSignin({ email, password })
+      .then((res) => {
+        console.log(res);
+        axios({
+          method: "POST",
+          url: "/api/auth/login",
+          data: { email },
+        })
+          .then((res) => {
+            console.log(res.data);
+            setIsLoading(false);
+            setUser(res.data.user);
+            router.push("/");
+          })
+          .catch((err) => {
+            console.log(err);
+            supabase?.auth.signOut();
+            setIsLoading(false);
+          });
+      })
+      .catch((err) => {
+        setIsLoading(false);
+        toast({
+          title: "Incorrect email or password",
+          description: err.message,
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+      });
   };
 
   return (
@@ -45,48 +84,45 @@ export default function Page() {
       top={0}
       right={0}
       flexDir="column"
-      gap={6}
+      gap={8}
+      pb={4}
     >
-      <Heading fontSize="2xl">
-        Login to{" "}
-        <Box as="span" color="brand.primary">
-          Forword
-        </Box>
-      </Heading>
-      <Stack w="25%">
-        <FormControl>
-          <FormLabel>Email</FormLabel>
-          <Input
-            type="email"
-            _active={{ borderColor: "brand.primary" }}
-            _focus={{ borderColor: "brand.primary", boxShadow: "none" }}
-            onChange={handleEmailChange}
-            value={email}
-          />
-        </FormControl>
-        <FormControl>
-          <FormLabel>Password</FormLabel>
-          <Input
-            type="password"
-            _active={{ borderColor: "brand.primary" }}
-            _focus={{ borderColor: "brand.primary", boxShadow: "none" }}
-            onChange={handlePasswordChange}
-            value={password}
-          />
-        </FormControl>
-        <Stack mt={6} gap={4}>
-          <Button onClick={handleLogin}>Login</Button>
-          <Link
-            as={NextLink}
-            href="/signup"
-            textAlign="center"
-            _hover={{
-              textDecoration: "none",
-              color: "brand.hoverPrimary",
-            }}
-          >
-            {"Don't have an account? Sign up now"}
-          </Link>
+      <Stack align="center">
+        <Heading fontSize="3xl">
+          Welcome to{" "}
+          <Box as="span" color="brand.primary">
+            Forword
+          </Box>
+        </Heading>
+        <Text fontWeight={300}>Sign in to continue</Text>
+      </Stack>
+      <Stack w={["70%", "50%", "50%", "25%"]} gap={2}>
+        <ForwordInput
+          label="Email"
+          onChange={handleEmailChange}
+          value={email}
+          w="100%"
+        />
+        <ForwordInput
+          label="Password"
+          type="password"
+          onChange={handlePasswordChange}
+          value={password}
+          w="100%"
+        />
+        <Stack mt={6}>
+          <ForwordButton onClick={handleLogin} w="100%" isLoading={isLoading}>
+            Sign in
+          </ForwordButton>
+          <Stack mt={4} gap={4}>
+            <ForwordLink href="/auth/forget-password">
+              Forgot password?
+            </ForwordLink>
+            <HStack justify="center" flexWrap="wrap" lineHeight={0.8}>
+              <Text fontWeight={300}>Not yet registered? </Text>
+              <ForwordLink href="/auth/signup">Create an account</ForwordLink>
+            </HStack>
+          </Stack>
         </Stack>
       </Stack>
     </Center>
