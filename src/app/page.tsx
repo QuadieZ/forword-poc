@@ -68,9 +68,13 @@ export default function Home() {
     axios({
       method: "POST",
       url: "/api/feed",
-      data: {
-        uid: user?.user_id,
-      },
+      ...(user?.user_id
+        ? {
+            data: {
+              uid: user?.user_id,
+            },
+          }
+        : {}),
     })
       .then((res) => {
         const response = res.data.data;
