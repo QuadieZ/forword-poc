@@ -1,5 +1,7 @@
+import { NextResponse } from "next/server";
+
 export async function GET() {
-    // get blog
+    // get all users from supabase
     // https://nextjs.org/docs/app/building-your-application/routing/route-handlers
-    return
+    return NextResponse.json({ message: 'Hello World' }, { status: 200 })
 }
