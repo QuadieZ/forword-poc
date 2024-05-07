@@ -1,15 +1,27 @@
 "use client";
 
-import { ForwordNavbar, ForwordSidebar } from "@/components";
-import { BlogPreviewData, ForwordBlogList } from "@/components/ForwordBlogList";
 import {
+  ForwordButton,
+  ForwordNavbar,
+  ForwordSidebar,
+  ForwordSpinner,
+} from "@/components";
+import { BlogPreviewData, ForwordBlogList } from "@/components/ForwordBlogList";
+import { useUserStore } from "@/state";
+import {
+  Center,
   Stack,
   Tab,
   TabList,
   TabPanel,
   TabPanels,
   Tabs,
+  Text,
 } from "@chakra-ui/react";
+import axios from "axios";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { Tables } from "../../types/supabase";
 
 const mockBlogPreview: BlogPreviewData[] = [
   {
@@ -43,6 +55,62 @@ const mockBlogPreview: BlogPreviewData[] = [
 ];
 
 export default function Home() {
+  const user = useUserStore((state) => state.user);
+
+  const [isLoading, setIsLoading] = useState(true);
+  const [forYouBlogs, setForYouBlogs] = useState<BlogPreviewData[]>([]);
+  const [ourPicksBlogs, setOurPicksBlogs] = useState<BlogPreviewData[]>([]);
+  const [followingBlogs, setFollowingBlogs] = useState<BlogPreviewData[]>([]);
+
+  const router = useRouter();
+  useEffect(() => {
+    axios({
+      method: "POST",
+      url: "/api/feed",
+      data: {
+        uid: user?.user_id,
+      },
+    })
+      .then((res) => {
+        const response = res.data.data;
+        const topPostsData = response.topPostsData as Tables<"blog">[];
+        const recommendedPostsData =
+          response.recommendedPostsData as Tables<"blog">[];
+        const followingPosts = response.followingPosts as Tables<"blog">[];
+        setForYouBlogs(
+          topPostsData.map((blog) => ({
+            title: blog.blog_name!,
+            description: blog.blog_description ?? "A very awesome blog",
+            image: blog.blog_image!,
+            slug: blog.blog_id!,
+            company: blog.organization_id!,
+          }))
+        );
+        setOurPicksBlogs(
+          recommendedPostsData.map((blog) => ({
+            title: blog.blog_name!,
+            description: blog.blog_description ?? "A very awesome blog",
+            image: blog.blog_image!,
+            slug: blog.blog_id!,
+            company: blog.organization_id!,
+          }))
+        );
+        setFollowingBlogs(
+          followingPosts.map((blog) => ({
+            title: blog.blog_name!,
+            description: blog.blog_description ?? "A very awesome blog",
+            image: blog.blog_image!,
+            slug: blog.blog_id!,
+            company: blog.organization_id!,
+          }))
+        );
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, []);
+
   return (
     <Stack gap={0} spacing={0} h="100%">
       <ForwordNavbar />
@@ -55,17 +123,50 @@ export default function Home() {
               <Tab>Our Picks</Tab>
               <Tab>Following</Tab>
             </TabList>
-            <TabPanels overflow="scroll" h="100%">
-              <TabPanel>
-                <ForwordBlogList blogs={mockBlogPreview} />
-              </TabPanel>
-              <TabPanel>
-                <ForwordBlogList blogs={mockBlogPreview} />
-              </TabPanel>
-              <TabPanel>
-                <ForwordBlogList blogs={mockBlogPreview} />
-              </TabPanel>
-            </TabPanels>
+            {isLoading ? (
+              <ForwordSpinner />
+            ) : (
+              <TabPanels overflow="scroll" h="100%">
+                <TabPanel>
+                  <ForwordBlogList blogs={forYouBlogs} />
+                </TabPanel>
+                <TabPanel>
+                  <ForwordBlogList blogs={ourPicksBlogs} />
+                </TabPanel>
+                <TabPanel h="100%">
+                  {!user ? (
+                    <Center w="100%" h="100%" flexDir="column" gap={4}>
+                      <Text>
+                        Join Forword today to follow your favorite blogs
+                      </Text>
+                      <ForwordButton
+                        onClick={() => {
+                          router.push("/auth/signup");
+                        }}
+                      >
+                        Sign up Now!
+                      </ForwordButton>
+                    </Center>
+                  ) : followingBlogs.length === 0 ? (
+                    <Center w="100%" h="100%" flexDir="column" gap={4}>
+                      <Text>
+                        Start Following to see blogs from your favorite
+                        organizations
+                      </Text>
+                      <ForwordButton
+                        onClick={() => {
+                          router.push("/organizations");
+                        }}
+                      >
+                        See Organizations on Forword
+                      </ForwordButton>
+                    </Center>
+                  ) : (
+                    <ForwordBlogList blogs={followingBlogs} />
+                  )}
+                </TabPanel>
+              </TabPanels>
+            )}
           </Tabs>
         </Stack>
       </Stack>

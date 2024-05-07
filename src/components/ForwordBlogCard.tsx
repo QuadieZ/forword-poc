@@ -1,13 +1,4 @@
-import {
-  Avatar,
-  AvatarGroup,
-  Card,
-  CardBody,
-  Heading,
-  Image,
-  Stack,
-  Text,
-} from "@chakra-ui/react";
+import { Card, CardBody, Heading, Image, Stack, Text } from "@chakra-ui/react";
 import { ForwordLink } from "./ForwordLink";
 
 export type ForwordBlogCardProps = {
@@ -37,7 +28,7 @@ export const ForwordBlogCard = (props: ForwordBlogCardProps) => {
             <Text py="2" fontWeight={300}>
               {description}
             </Text>
-            <AvatarGroup size="sm" max={3} mt={2}>
+            {/* <AvatarGroup size="sm" max={3} mt={2}>
               <Avatar name="Ryan Florence" src="https://bit.ly/ryan-florence" />
               <Avatar name="Segun Adebayo" src="https://bit.ly/sage-adebayo" />
               <Avatar name="Kent Dodds" src="https://bit.ly/kent-c-dodds" />
@@ -45,7 +36,7 @@ export const ForwordBlogCard = (props: ForwordBlogCardProps) => {
                 name="Prosper Otemuyiwa"
                 src="https://bit.ly/prosper-baba"
               />
-            </AvatarGroup>
+            </AvatarGroup> */}
           </CardBody>
         </Stack>
       </Card>

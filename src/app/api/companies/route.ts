@@ -7,8 +7,15 @@ const resend = new Resend(process.env.NEXT_PUBLIC_RESEND_KEY);
 
 export async function GET() {
     // get all companies
-    // https://nextjs.org/docs/app/building-your-application/routing/route-handlers
-    return
+    const { data, error } = await supabase!
+        .from('organization')
+        .select('organization_id, organization_name, description')
+
+    if (error) {
+        return NextResponse.json({ error }, { status: 500 })
+    }
+
+    return NextResponse.json({ data, status: 200 })
 }
 
 export async function POST(request: Request) {
@@ -23,7 +30,10 @@ export async function POST(request: Request) {
             {
                 organization_id: id,
                 organization_name: body.organizationName,
-                members_id: [body.currentUserId]
+                members_id: [body.currentUserId],
+                followers_id: [],
+                followers_count: 0,
+                blogs_id: [],
             },
         ])
         .select()
@@ -64,9 +74,11 @@ export async function POST(request: Request) {
                 .eq('email', email)
 
             await supabase!
-                .rpc('organization', {
+                .from('organization')
+                .update({
                     members_id: data[0].user_id,
                 })
+                .eq('organization_id', id)
         } else {
             const uid = uuid()
             await supabase!.

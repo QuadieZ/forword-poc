@@ -1,4 +1,4 @@
-import { Divider, Stack } from "@chakra-ui/react";
+import { Divider, Stack, Text } from "@chakra-ui/react";
 import { ForwordBlogCard } from "./ForwordBlogCard";
 
 export type BlogPreviewData = {
@@ -23,16 +23,20 @@ export const ForwordBlogList = (props: ForwordBlogListProps) => {
       h="100%"
       overflow="scroll"
     >
-      {blogs.map((blog, index) => (
-        <ForwordBlogCard
-          key={index}
-          title={blog.title}
-          description={blog.description}
-          image={blog.image}
-          slug={blog.slug}
-          company={blog.company}
-        />
-      ))}
+      {blogs.length > 0 ? (
+        blogs.map((blog, index) => (
+          <ForwordBlogCard
+            key={index}
+            title={blog.title}
+            description={blog.description}
+            image={blog.image}
+            slug={blog.slug}
+            company={blog.company}
+          />
+        ))
+      ) : (
+        <Text>No Blogs here yet, check back later!</Text>
+      )}
     </Stack>
   );
 };

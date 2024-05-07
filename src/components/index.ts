@@ -9,5 +9,7 @@ export * from './ForwordInput'
 export * from './ForwordLink'
 export * from './ForwordNavbar'
 export * from './ForwordSidebar'
+export * from './ForwordSpinner'
 export * from './Providers'
 export * from './editor/ForwordEditor'
+

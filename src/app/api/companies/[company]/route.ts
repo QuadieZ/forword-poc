@@ -1,32 +1,40 @@
-import supabase from "@/supabase";
-import { NextResponse } from "next/server";
-import { uuid } from 'uuidv4';
+import supabase from "@/supabase"
+import { NextResponse } from "next/server"
 
-export async function GET() {
+export async function GET(_, {
+    params
+}: { params: { company: string } }) {
+    const { company } = params
+    const { data: companyData, error: errorCompany } = await supabase!
+        .from('organization')
+        .select('organization_id, organization_name, description, blogs_id, followers_count, members_id')
+        .eq('organization_id', company)
+
+    const { data: blogData, error: errorBlog } = await supabase!
+        .from('blog')
+        .select('blog_id, blog_name, blog_image')
+        .in('blog_id', companyData![0].blogs_id ?? [])
+
+    const { data: memberData, error: errorMember } = await supabase!
+        .from('user_info')
+        .select('user_id, name')
+        .in('user_id', companyData![0].members_id ?? [])
+
+    if (errorCompany || errorBlog || errorMember) {
+        return NextResponse.json({ error: 'Error querying from database' }, { status: 500 })
+    }
+
     // get all blogs of company from supabase
     // https://nextjs.org/docs/app/building-your-application/routing/route-handlers
-    return
+    return NextResponse.json({
+        data: {
+            members: memberData,
+            blogs: blogData,
+            company: companyData
+        }, status: 200
+    })
 }
 
 export async function POST(request: Request) {
-    // create a new company
-
-    console.log(request)
-
-    const { data, error } = await supabase!
-        .from('organization')
-        .insert([
-            {
-                organization_id: `org-${uuid()}`,
-                organization_name: 'Company 1',
-                members_id: []
-            },
-        ])
-        .select()
-
-    if (error) {
-        return NextResponse.json({ error }, { status: 500 })
-    } else {
-        return NextResponse.json({ data }, { status: 200 })
-    }
+    return NextResponse.json({ status: 200 })
 }

@@ -1,7 +1,6 @@
 "use client";
 
 import { useUserStore } from "@/state";
-import supabase from "@/supabase";
 import {
   Avatar,
   Center,
@@ -22,8 +21,10 @@ import {
 import axios from "axios";
 import NextLink from "next/link";
 import { ReactElement, useEffect, useState } from "react";
-import { BsFillPeopleFill, BsPlus } from "react-icons/bs";
+import { BsPlus } from "react-icons/bs";
+import { FaSwatchbook } from "react-icons/fa";
 import { Fa42Group } from "react-icons/fa6";
+import { Tables } from "../../types/supabase";
 import { ForwordButton } from "./ForwordButton";
 import { ForwordEmailInput } from "./ForwordEmailInput";
 import { ForwordInput } from "./ForwordInput";
@@ -90,12 +91,19 @@ export const ForwordSidebar = () => {
 
   useEffect(() => {
     async function getOrganizations(orgsId: string[]) {
-      const { data } = await supabase!
-        .from("organization")
-        .select("*")
-        .in("organization_id", orgsId);
-
-      return data;
+      return await axios({
+        method: "POST",
+        url: `/api/users/${user?.user_id}/company`,
+        data: {
+          targetOrgIds: orgsId,
+        },
+      })
+        .then((res) => {
+          return res.data.data as Tables<"organization">[];
+        })
+        .catch((err) => {
+          console.error(err);
+        });
     }
 
     if (user) {
@@ -110,7 +118,8 @@ export const ForwordSidebar = () => {
       } else {
         const userOrgs = user.organization_id;
         if (userOrgs && userOrgs?.length > 0) {
-          const orgs = getOrganizations(userOrgs).then((orgs) => {
+          console.log(userOrgs);
+          getOrganizations(userOrgs).then((orgs) => {
             setOrganizations(orgs ?? []);
             setDisplayOrganizations(
               orgs?.map((org) => ({
@@ -199,15 +208,20 @@ export const ForwordSidebar = () => {
           />
         )}
         <SidebarItem
+          href="/"
+          title="Feed"
+          icon={<FaSwatchbook size={24} color="#3D58D8" />}
+        />
+        <SidebarItem
           href="/organizations"
           title="Organizations"
           icon={<Fa42Group size={24} color="#3D58D8" />}
         />
-        <SidebarItem
+        {/* <SidebarItem
           href="/users"
           title="Collaborators"
           icon={<BsFillPeopleFill size={24} color="#3D58D8" />}
-        />
+        /> */}
       </Stack>
       <Center my={5}>
         <Divider borderColor="brand.hoverSecondary" w="85%" />
@@ -220,7 +234,7 @@ export const ForwordSidebar = () => {
             </Text>
             <BsPlus size={20} cursor="pointer" onClick={() => onOpen()} />
           </HStack>
-          <Stack gap={0} pl={4} mt={1}>
+          <Stack gap={0} pl={displayOrganizations.length > 0 ? 4 : 0} mt={1}>
             {displayOrganizations.length > 0 ? (
               displayOrganizations.map((org) => (
                 <SidebarItem

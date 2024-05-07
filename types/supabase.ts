@@ -11,63 +11,81 @@ export type Database = {
     Tables: {
       blog: {
         Row: {
-          "blog detail": string | null
-          "blog id": string
-          "blog post date": string | null
-          "blog post time": string | null
-          "category id": string
+          blog_description: string | null
+          blog_detail: string | null
+          blog_id: string
+          blog_image: string | null
+          blog_likes_count: number | null
+          blog_name: string | null
+          blog_post_date: string | null
+          blog_post_time: string | null
+          category_id: string
+          is_recommended: boolean | null
+          organization_id: string
           publish: boolean | null
-          "user id": string
+          user_id: string
         }
         Insert: {
-          "blog detail"?: string | null
-          "blog id": string
-          "blog post date"?: string | null
-          "blog post time"?: string | null
-          "category id": string
+          blog_description?: string | null
+          blog_detail?: string | null
+          blog_id: string
+          blog_image?: string | null
+          blog_likes_count?: number | null
+          blog_name?: string | null
+          blog_post_date?: string | null
+          blog_post_time?: string | null
+          category_id: string
+          is_recommended?: boolean | null
+          organization_id: string
           publish?: boolean | null
-          "user id": string
+          user_id: string
         }
         Update: {
-          "blog detail"?: string | null
-          "blog id"?: string
-          "blog post date"?: string | null
-          "blog post time"?: string | null
-          "category id"?: string
+          blog_description?: string | null
+          blog_detail?: string | null
+          blog_id?: string
+          blog_image?: string | null
+          blog_likes_count?: number | null
+          blog_name?: string | null
+          blog_post_date?: string | null
+          blog_post_time?: string | null
+          category_id?: string
+          is_recommended?: boolean | null
+          organization_id?: string
           publish?: boolean | null
-          "user id"?: string
+          user_id?: string
         }
         Relationships: []
       }
       blog_comment: {
         Row: {
-          "blog id": string
-          "comment create date": string | null
-          "comment create time": string | null
-          "comment id": string
-          "comment text": string | null
-          "user id": string
+          blog_id: string
+          comment_create_date: string | null
+          comment_create_time: string | null
+          comment_id: string
+          comment_text: string | null
+          user_id: string
         }
         Insert: {
-          "blog id": string
-          "comment create date"?: string | null
-          "comment create time"?: string | null
-          "comment id": string
-          "comment text"?: string | null
-          "user id": string
+          blog_id: string
+          comment_create_date?: string | null
+          comment_create_time?: string | null
+          comment_id: string
+          comment_text?: string | null
+          user_id: string
         }
         Update: {
-          "blog id"?: string
-          "comment create date"?: string | null
-          "comment create time"?: string | null
-          "comment id"?: string
-          "comment text"?: string | null
-          "user id"?: string
+          blog_id?: string
+          comment_create_date?: string | null
+          comment_create_time?: string | null
+          comment_id?: string
+          comment_text?: string | null
+          user_id?: string
         }
         Relationships: [
           {
             foreignKeyName: "Blog comment_user id_fkey"
-            columns: ["user id"]
+            columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "user_account"
             referencedColumns: ["user_id"]
@@ -76,27 +94,27 @@ export type Database = {
       }
       blog_like: {
         Row: {
-          "blog id": string
-          "like date": string | null
-          "like time": string | null
-          "user id": string
+          blog_id: string
+          like_date: string | null
+          like_time: string | null
+          user_id: string
         }
         Insert: {
-          "blog id": string
-          "like date"?: string | null
-          "like time"?: string | null
-          "user id": string
+          blog_id: string
+          like_date?: string | null
+          like_time?: string | null
+          user_id: string
         }
         Update: {
-          "blog id"?: string
-          "like date"?: string | null
-          "like time"?: string | null
-          "user id"?: string
+          blog_id?: string
+          like_date?: string | null
+          like_time?: string | null
+          user_id?: string
         }
         Relationships: [
           {
             foreignKeyName: "Blog like_user id_fkey"
-            columns: ["user id"]
+            columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "user_account"
             referencedColumns: ["user_id"]
@@ -105,33 +123,33 @@ export type Database = {
       }
       blog_reply: {
         Row: {
-          "comment create date": string | null
-          "comment create time": string | null
-          "comment id": string
-          "comment text": string | null
-          "reply id": string
-          "user id": string
+          comment_create_date: string | null
+          comment_create_time: string | null
+          comment_id: string
+          comment_text: string | null
+          reply_id: string
+          user_id: string
         }
         Insert: {
-          "comment create date"?: string | null
-          "comment create time"?: string | null
-          "comment id": string
-          "comment text"?: string | null
-          "reply id": string
-          "user id": string
+          comment_create_date?: string | null
+          comment_create_time?: string | null
+          comment_id: string
+          comment_text?: string | null
+          reply_id: string
+          user_id: string
         }
         Update: {
-          "comment create date"?: string | null
-          "comment create time"?: string | null
-          "comment id"?: string
-          "comment text"?: string | null
-          "reply id"?: string
-          "user id"?: string
+          comment_create_date?: string | null
+          comment_create_time?: string | null
+          comment_id?: string
+          comment_text?: string | null
+          reply_id?: string
+          user_id?: string
         }
         Relationships: [
           {
             foreignKeyName: "Blog reply_user id_fkey"
-            columns: ["user id"]
+            columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "user_account"
             referencedColumns: ["user_id"]
@@ -140,24 +158,24 @@ export type Database = {
       }
       blog_save: {
         Row: {
-          "blog id": string
-          "save date": string | null
-          "user id": string
+          blog_id: string
+          save_date: string | null
+          user_id: string
         }
         Insert: {
-          "blog id": string
-          "save date"?: string | null
-          "user id": string
+          blog_id: string
+          save_date?: string | null
+          user_id: string
         }
         Update: {
-          "blog id"?: string
-          "save date"?: string | null
-          "user id"?: string
+          blog_id?: string
+          save_date?: string | null
+          user_id?: string
         }
         Relationships: [
           {
             foreignKeyName: "User Save Blog_user id_fkey"
-            columns: ["user id"]
+            columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "user_account"
             referencedColumns: ["user_id"]
@@ -166,18 +184,18 @@ export type Database = {
       }
       category: {
         Row: {
-          "category id": string
-          "category name": string
+          category_id: string
+          category_name: string
           description: string | null
         }
         Insert: {
-          "category id": string
-          "category name": string
+          category_id: string
+          category_name: string
           description?: string | null
         }
         Update: {
-          "category id"?: string
-          "category name"?: string
+          category_id?: string
+          category_name?: string
           description?: string | null
         }
         Relationships: []
@@ -185,6 +203,10 @@ export type Database = {
       organization: {
         Row: {
           address: string | null
+          blogs_id: string[] | null
+          description: string | null
+          followers_count: number | null
+          followers_id: string[] | null
           members_id: string[] | null
           organization_id: string
           organization_name: string
@@ -192,6 +214,10 @@ export type Database = {
         }
         Insert: {
           address?: string | null
+          blogs_id?: string[] | null
+          description?: string | null
+          followers_count?: number | null
+          followers_id?: string[] | null
           members_id?: string[] | null
           organization_id: string
           organization_name: string
@@ -199,6 +225,10 @@ export type Database = {
         }
         Update: {
           address?: string | null
+          blogs_id?: string[] | null
+          description?: string | null
+          followers_count?: number | null
+          followers_id?: string[] | null
           members_id?: string[] | null
           organization_id?: string
           organization_name?: string
@@ -208,19 +238,19 @@ export type Database = {
       }
       role: {
         Row: {
-          "role authority id": string | null
-          "role id": string
-          "role name": string
+          role_authority_id: string | null
+          role_id: string
+          role_name: string
         }
         Insert: {
-          "role authority id"?: string | null
-          "role id": string
-          "role name": string
+          role_authority_id?: string | null
+          role_id: string
+          role_name: string
         }
         Update: {
-          "role authority id"?: string | null
-          "role id"?: string
-          "role name"?: string
+          role_authority_id?: string | null
+          role_id?: string
+          role_name?: string
         }
         Relationships: []
       }
@@ -229,35 +259,35 @@ export type Database = {
           comment: boolean | null
           edit: boolean
           read: boolean | null
-          "role authority id": string
+          role_authority_id: string
         }
         Insert: {
           comment?: boolean | null
           edit: boolean
           read?: boolean | null
-          "role authority id": string
+          role_authority_id: string
         }
         Update: {
           comment?: boolean | null
           edit?: boolean
           read?: boolean | null
-          "role authority id"?: string
+          role_authority_id?: string
         }
         Relationships: []
       }
       user_account: {
         Row: {
-          "last login": string | null
+          last_login: string | null
           register_date: string | null
           user_id: string
         }
         Insert: {
-          "last login"?: string | null
+          last_login?: string | null
           register_date?: string | null
           user_id: string
         }
         Update: {
-          "last login"?: string | null
+          last_login?: string | null
           register_date?: string | null
           user_id?: string
         }
@@ -271,7 +301,7 @@ export type Database = {
           "last name": string | null
           name: string | null
           organization_id: string[] | null
-          "phone number": number | null
+          phone_number: number | null
           role_id: string
           user_id: string
           username: string | null
@@ -283,7 +313,7 @@ export type Database = {
           "last name"?: string | null
           name?: string | null
           organization_id?: string[] | null
-          "phone number"?: number | null
+          phone_number?: number | null
           role_id: string
           user_id: string
           username?: string | null
@@ -295,7 +325,7 @@ export type Database = {
           "last name"?: string | null
           name?: string | null
           organization_id?: string[] | null
-          "phone number"?: number | null
+          phone_number?: number | null
           role_id?: string
           user_id?: string
           username?: string | null
