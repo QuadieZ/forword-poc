@@ -36,7 +36,7 @@ export async function POST(request: Request) {
 
     const followingPosts: any[] = []
 
-    uid && followingOrganizations?.forEach(async (org) => {
+    uid !== "" && followingOrganizations?.forEach(async (org) => {
         const { data, error } = await supabase!
             .from('blog')
             .select('blog_id, organization_id, blog_name, blog_image, blog_description')
