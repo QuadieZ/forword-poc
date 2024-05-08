@@ -31,7 +31,7 @@ export async function POST(request: Request) {
         .from('organization')
         .select('organization_id')
         .order('followers_count', { ascending: false })
-        .contains('followers_id', [uid])
+        .contains('followers_id', uid !== "" ? [uid] : [])
         .limit(5)
 
     const followingPosts: any[] = []
