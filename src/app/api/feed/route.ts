@@ -36,23 +36,25 @@ export async function POST(request: Request) {
 
     const followingPosts: any[] = []
 
-    uid !== "" && followingOrganizations?.forEach(async (org) => {
-        const { data, error } = await supabase!
-            .from('blog')
-            .select('blog_id, organization_id, blog_name, blog_image, blog_description')
-            .eq('organization_id', org.organization_id)
-            .order('blog_post_date', { ascending: false })
-            .eq('publish', true)
-            .limit(1)
+    if (uid !== "" && followingOrganizations) {
+        followingOrganizations?.forEach(async (org) => {
+            const { data, error } = await supabase!
+                .from('blog')
+                .select('blog_id, organization_id, blog_name, blog_image, blog_description')
+                .eq('organization_id', org.organization_id)
+                .order('blog_post_date', { ascending: false })
+                .eq('publish', true)
+                .limit(1)
 
-        if (data) {
-            followingPosts.push(data)
-        }
+            if (data) {
+                followingPosts.push(data)
+            }
 
-        if (error) {
-            console.error(error)
-        }
-    })
+            if (error) {
+                console.error(error)
+            }
+        })
+    }
 
     if (topPostsError || recomendedPostsError || followingError || allPostsError) {
         console.log(topPostsError, recomendedPostsError, followingError)
